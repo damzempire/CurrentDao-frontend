@@ -1,0 +1,48 @@
+/* Mobile-specific styles and overrides */
+
+@layer components {
+  .touch-scale {
+    transition: transform 0.1s ease-out;
+  }
+  
+  .touch-scale:active {
+    transform: scale(0.96);
+  }
+
+  .no-scroll {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .swipe-transition {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* Hide scrollbars but maintain functionality */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Optimize for touch interactions */
+* {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+input, textarea {
+  user-select: text;
+}
