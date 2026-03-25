@@ -6,11 +6,16 @@ import EnergyPortfolioCard from '@/components/dashboard/EnergyPortfolioCard';
 import PriceChart from '@/components/dashboard/PriceChart';
 import EarningsChart from '@/components/dashboard/EarningsChart';
 import TradingActivityCard from '@/components/dashboard/TradingActivityCard';
+import FAQSection from '@/components/help/FAQSection';
+import VideoTutorial from '@/components/help/VideoTutorial';
+import Tooltip from '@/components/onboarding/TooltipSystem';
 import { useDashboardData } from '@/hooks/useDashboardData';
+import { useOnboarding } from '@/hooks/useOnboarding';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function DashboardPage() {
   const { data, isLoading, isConnected, error } = useDashboardData();
+  const { startTutorial } = useOnboarding();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Sync dark mode with system preference on initial load
@@ -42,6 +47,12 @@ export default function DashboardPage() {
             <h1 className="text-xl font-bold tracking-tight">Energy Producer Dashboard</h1>
           </div>
           <div className="flex items-center gap-4">
+            <button
+              onClick={startTutorial}
+              className="hidden items-center gap-2 rounded-lg bg-secondary px-3 py-1.5 text-xs font-bold text-primary transition-all hover:bg-primary hover:text-white sm:flex"
+            >
+              Take a Tour
+            </button>
             <div className="hidden items-center gap-2 sm:flex">
               <span className="relative flex h-2 w-2">
                 <span={`absolute inline-flex h-full w-full rounded-full ${isConnected ? 'bg-emerald-400 animate-ping opacity-75' : 'bg-red-400'}`}></span>
@@ -87,15 +98,17 @@ export default function DashboardPage() {
           ) : (
             <div className="space-y-8">
               {/* Portfolio Stats Section */}
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                <EnergyPortfolioCard
-                  title="Total Energy Produced"
-                  value={data.stats.totalEnergy.toLocaleString()}
-                  unit="kWh"
-                  change={data.stats.totalKwhChange}
-                  icon="energy"
-                  isLoading={isLoading}
-                />
+              <div id="dashboard-overview" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <Tooltip content="This tracks your total verified energy production across all connected meters.">
+                  <EnergyPortfolioCard
+                    title="Total Energy Produced"
+                    value={data.stats.totalEnergy.toLocaleString()}
+                    unit="kWh"
+                    change={data.stats.totalKwhChange}
+                    icon="energy"
+                    isLoading={isLoading}
+                  />
+                </Tooltip>
                 <EnergyPortfolioCard
                   title="Total Earnings"
                   value={`$${data.stats.earnings.toLocaleString()}`}
@@ -119,8 +132,14 @@ export default function DashboardPage() {
               </div>
 
               {/* Activity Section */}
-              <div className="w-full">
+              <div id="trading-activity" className="w-full">
                 <TradingActivityCard activities={data.recentActivity} isLoading={isLoading} />
+              </div>
+
+              {/* Help & Support Section */}
+              <div className="mt-16 space-y-12 border-t border-border pt-16">
+                 <VideoTutorial />
+                 <FAQSection />
               </div>
             </div>
           )}
