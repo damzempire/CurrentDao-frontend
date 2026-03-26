@@ -1,11 +1,19 @@
 # dependencies
 /node_modules
+/mobile/node_modules
 /.pnp
 .pnp.js
 package-lock.json
 
 # testing
 /coverage
+
+# react native artifacts
+/mobile/ios/Pods
+/mobile/ios/build
+/mobile/android/.gradle
+/mobile/android/app/build
+/mobile/android/build
 
 # next.js
 /.next/
